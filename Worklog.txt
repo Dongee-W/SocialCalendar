@@ -1,0 +1,5 @@
+Sliding Tabs with PagerSlidingTabStrip
+	https://github.com/codepath/android_guides/wiki/Sliding-Tabs-with-PagerSlidingTabStrip
+
+Material Calendar View
+	https://github.com/prolificinteractive/material-calendarview
