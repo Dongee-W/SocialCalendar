@@ -2,4 +2,6 @@
     <string name="app_name">SocialCalendar</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="daily_detail">Daily Details</string>
+
 </resources>

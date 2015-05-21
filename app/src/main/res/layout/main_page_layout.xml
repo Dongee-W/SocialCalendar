@@ -7,7 +7,25 @@
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            xmlns:app="http://schemas.android.com/apk/res-auto"/>
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:paddingBottom="@dimen/abc_button_padding_horizontal_material"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Today"
+            android:textColor="@color/material_blue_grey_800"
+            android:id="@+id/textView"
+            android:textSize="@dimen/abc_action_bar_icon_vertical_padding_material"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="@color/abc_secondary_text_material_dark"/>
+
+    <View
+            android:layout_width="@dimen/abc_config_prefDialogWidth"
+            android:layout_height="1dip"
+            android:layout_gravity="center_horizontal"
+            android:background="#008B8A"
+            android:paddingTop="@dimen/abc_action_bar_default_padding_material"/>
 
     <ListView
             android:id="@+id/listview_todo"
