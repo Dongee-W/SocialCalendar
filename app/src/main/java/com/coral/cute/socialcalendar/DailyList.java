@@ -31,6 +31,7 @@ public class DailyList {
 
             toDoList = new ArrayList<Event>();
             JSONArray ja = jo.getJSONArray("todo");
+
             for(int i=0;i<ja.length();i++){
                 Event et = new Event(ja.getJSONObject(i).toString());
                 toDoList.add(et);

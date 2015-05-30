@@ -91,7 +91,7 @@ public class MainPageFrag extends Fragment {
             Log.i("yy", userID);
         }
         FetchDataTask fdt = new FetchDataTask();
-        fdt.execute("yes");
+        fdt.execute(userID);
     }
 
     /** Fetch data from server */
@@ -136,7 +136,7 @@ public class MainPageFrag extends Fragment {
         @Override
         protected List<String> doInBackground(String... params) {
             String dayString = "{\"day\": {\"year\": 2015, \"month\": 5, \"date\": 18}, \"todo\":";
-            String todo = getWebServre("GetDay", "UserID=gaga&Year=2015&Month=05&Date=21");
+            String todo = getWebServre("GetDay", "UserID=" + params[0] + "&Year=2015&Month=05&Date=21");
             String total = dayString + todo + "}";
             //Log.e("sdf",total);
             DailyList myDL = new DailyList(total);
@@ -146,9 +146,14 @@ public class MainPageFrag extends Fragment {
         @Override
         protected void onPostExecute(List<String> result) {
             mForecastAdapter.clear();
-            for(String dayForecastStr : result) {
-                mForecastAdapter.add(dayForecastStr);
+            if (result.size() == 0) {
+                mForecastAdapter.add("No data yet.");
+            } else {
+                for(String dayForecastStr : result) {
+                    mForecastAdapter.add(dayForecastStr);
+                }
             }
+
         }
     }
 
