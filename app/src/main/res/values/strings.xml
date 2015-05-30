@@ -3,5 +3,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="daily_detail">Daily Details</string>
+    <string name="title_activity_login_register">LoginRegister</string>
 
 </resources>

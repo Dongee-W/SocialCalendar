@@ -3,13 +3,14 @@
     package="com.coral.cute.socialcalendar" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginRegister"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,10 +19,15 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".DailyDetail"
-                android:label="@string/daily_detail"
-                android:parentActivityName=".MainActivity" >
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".DailyDetail"
+            android:label="@string/daily_detail"
+            android:parentActivityName=".MainActivity" >
+        </activity>
+
     </application>
 
 </manifest>

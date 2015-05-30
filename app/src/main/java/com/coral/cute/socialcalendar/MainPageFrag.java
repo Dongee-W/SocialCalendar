@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -25,12 +26,15 @@ import java.util.List;
 
 public class MainPageFrag extends Fragment {
 
+    private String userID;
     ArrayAdapter mForecastAdapter;
     // Inflate the fragment layout we defined above for this fragment
     // Set the associated text for the title
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_page_layout, container, false);
+
+
 
         final com.prolificinteractive.materialcalendarview.MaterialCalendarView cal =
                 (com.prolificinteractive.materialcalendarview.MaterialCalendarView) view.findViewById(R.id.calendarView);
@@ -80,6 +84,12 @@ public class MainPageFrag extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        Intent intent = getActivity().getIntent();
+        if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
+            userID = intent.getStringExtra(Intent.EXTRA_TEXT);
+            Log.i("yy", userID);
+        }
         FetchDataTask fdt = new FetchDataTask();
         fdt.execute("yes");
     }
@@ -90,7 +100,7 @@ public class MainPageFrag extends Fragment {
         public String getWebServre(String Action, String Para) {
 
 
-            String ServerUrl = "http://140.116.86.193/Public/AI_Account.aspx?";
+            String ServerUrl = "http://140.116.86.54/Public/AI_Account.aspx?";
 
             String requestData = "Fail";
 
@@ -126,7 +136,7 @@ public class MainPageFrag extends Fragment {
         @Override
         protected List<String> doInBackground(String... params) {
             String dayString = "{\"day\": {\"year\": 2015, \"month\": 5, \"date\": 18}, \"todo\":";
-            String todo = getWebServre("GetDay", "UserID=gaga&Year=2015&Month=05&Date=22");
+            String todo = getWebServre("GetDay", "UserID=gaga&Year=2015&Month=05&Date=21");
             String total = dayString + todo + "}";
             //Log.e("sdf",total);
             DailyList myDL = new DailyList(total);
