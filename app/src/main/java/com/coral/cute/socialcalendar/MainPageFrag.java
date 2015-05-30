@@ -88,7 +88,6 @@ public class MainPageFrag extends Fragment {
         Intent intent = getActivity().getIntent();
         if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
             userID = intent.getStringExtra(Intent.EXTRA_TEXT);
-            Log.i("yy", userID);
         }
         FetchDataTask fdt = new FetchDataTask();
         fdt.execute(userID);
