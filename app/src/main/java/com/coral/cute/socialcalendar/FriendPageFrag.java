@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -23,11 +25,26 @@ public class FriendPageFrag extends Fragment {
 
     private String userID;
     ArrayAdapter friendAdapter;
+    private Button addFriendBtn;
+    private TextView friendID;
     // Inflate the fragment layout we defined above for this fragment
     // Set the associated text for the title
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.friend_page_layout, container, false);
+
+        friendID = (TextView) view.findViewById(R.id.friendID);
+
+        addFriendBtn = (Button) view.findViewById(R.id.addFriend);
+        addFriendBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                AddFriendTask aft = new AddFriendTask();
+                Log.i("hhh", friendID.getText().toString());
+                aft.execute(userID, friendID.getText().toString());
+            }
+        });
 
         List<String> weekForecast = new ArrayList<String>();
         friendAdapter =
@@ -101,7 +118,7 @@ public class FriendPageFrag extends Fragment {
         @Override
         protected List<String> doInBackground(String... params) {
             String friends = getWebServre("GetFriendList", "UserID=" + params[0]);
-             //Log.e("sdf",total);
+            //Log.e("sdf",total);
             Friends fs = new Friends(friends);
             return fs.userIDs;
         }
@@ -118,5 +135,53 @@ public class FriendPageFrag extends Fragment {
             }
 
         }
+    }
+
+    public class AddFriendTask extends AsyncTask<String, Void, Void> {
+
+        public String getWebServre(String Action, String Para) {
+
+
+            String ServerUrl = "http://140.116.86.54/Public/AI_Account.aspx?";
+
+            String requestData = "Fail";
+
+
+            try {
+                URL url = new URL(ServerUrl + "Action=" + Action + "&" + Para);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+                con.setConnectTimeout(6000);
+                con.setRequestMethod("GET");
+                con.setRequestProperty("Content-Type", "text/xml;charset=utf-8");
+                con.connect();
+
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(
+                        con.getInputStream(), "UTF-8"));
+                String jsonString = reader.readLine();
+                reader.close();
+                // json
+                //String jsonString = jsonString1;
+                //JSONArray jsonarr = new JSONArray(jsonString);
+                //requestData = jsonObj.getJSONObject("ID") + "";
+
+                //requestData = jsonarr.getJSONObject(0).getString("remark")+"";
+
+                return jsonString;
+
+            } catch (Exception e) {
+                return e.toString();
+            }
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            Log.e("kkkk", params[0]);
+            Log.e("kkkk", params[1]);
+            String friends = getWebServre("AddFriend", "User1=" + params[0] + "&User2=" + params[1]);
+            return null;
+        }
+
     }
 }
