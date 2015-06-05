@@ -5,5 +5,6 @@
     <string name="action_settings">Setting</string>
     <string name="daily_detail">Daily Details</string>
     <string name="title_activity_login_register">LoginRegister</string>
+    <string name="title_activity_event_form">EventForm</string>
 
 </resources>

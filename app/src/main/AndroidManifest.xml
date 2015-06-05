@@ -25,9 +25,13 @@
         <activity
             android:name=".DailyDetail"
             android:label="@string/daily_detail"
-            android:parentActivityName=".MainActivity" >
+             >
         </activity>
-
+        <activity
+            android:name=".EventForm"
+            android:label="@string/title_activity_event_form"
+            android:parentActivityName=".DailyDetail">
+        </activity>
     </application>
 
 </manifest>

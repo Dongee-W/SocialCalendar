@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ public class MainPageFrag extends Fragment {
 
     private String userID;
     ArrayAdapter mForecastAdapter;
+
     // Inflate the fragment layout we defined above for this fragment
     // Set the associated text for the title
     @Override
@@ -51,7 +53,7 @@ public class MainPageFrag extends Fragment {
         );
 
 
-        // Create some dummy data for the ListView.  Here's a sample weekly forecast
+        // Create some dummy data for the ListView.
         String[] data = {
                 "Study Android     May 12, 2015  3:02-9:05",
                 "Return toy     May 13, 2015  10:00-12:00",
@@ -61,7 +63,7 @@ public class MainPageFrag extends Fragment {
                 "Sing music     May 14, 2015  13:00-19:00",
                 "Lord of rings     May 14, 2015  13:20-19:34"
         };
-        List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
+        List<String> todayList = new ArrayList<String>(Arrays.asList(data));
 
 
         // Now that we have some dummy forecast data, create an ArrayAdapter.
@@ -72,13 +74,39 @@ public class MainPageFrag extends Fragment {
                         getActivity(), // The current context (this activity)
                         R.layout.list_item_todo, // The name of the layout ID.
                         R.id.list_item_todo_textview, // The ID of the textview to populate.
-                        weekForecast);
+                        todayList);
 
         // Get a reference to the ListView, and attach this adapter to it.
         ListView listView = (ListView) view.findViewById(R.id.listview_todo);
         listView.setAdapter(mForecastAdapter);
+        setListViewHeightBasedOnChildren(listView);
 
         return view;
+    }
+
+    /**** Method for Setting the Height of the ListView dynamically.
+     **** Hack to fix the issue of not showing all the items of the ListView
+     **** when placed inside a ScrollView  ****/
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 
     @Override
@@ -100,9 +128,6 @@ public class MainPageFrag extends Fragment {
 
 
             String ServerUrl = "http://140.116.86.54/Public/AI_Account.aspx?";
-
-            String requestData = "Fail";
-
 
             try {
                 URL url = new URL(ServerUrl + "Action=" + Action + "&" + Para);
@@ -135,7 +160,7 @@ public class MainPageFrag extends Fragment {
         @Override
         protected List<String> doInBackground(String... params) {
             String dayString = "{\"day\": {\"year\": 2015, \"month\": 5, \"date\": 18}, \"todo\":";
-            String todo = getWebServre("GetDay", "UserID=" + params[0] + "&Year=2015&Month=05&Date=21");
+            String todo = getWebServre("GetDay", "UserID=" + params[0] + "&Year=2015&Month=06&Date=21");
             String total = dayString + todo + "}";
             //Log.e("sdf",total);
             DailyList myDL = new DailyList(total);
