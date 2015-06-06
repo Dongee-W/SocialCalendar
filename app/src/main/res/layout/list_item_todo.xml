@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent" android:gravity="center_vertical"
-          android:id="@+id/list_item_todo_textview"
-          android:textSize="@dimen/abc_action_bar_icon_vertical_padding_material"
-          android:padding="@dimen/abc_action_bar_icon_vertical_padding_material"
-        >
 
-</TextView>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content">
+    <ImageView
+            android:id="@+id/image"
+            android:layout_width="50dip"
+            android:layout_height="50dip" android:src="@drawable/event_meeting" android:scaleType="centerCrop"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp">
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:gravity="center_vertical"
+                  android:id="@+id/list_item_todo_textview"/>
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:gravity="center_vertical"
+                  android:id="@+id/list_item_remark_textview"
+                  android:textSize="10dp"/>
+    </LinearLayout>
+
+
+</LinearLayout>

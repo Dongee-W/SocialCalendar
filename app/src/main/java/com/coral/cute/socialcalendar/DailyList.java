@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 
 public class DailyList {
@@ -68,11 +69,32 @@ public class DailyList {
 
     public List<String> eventStringArray() {
     	List<String> newSA = new ArrayList<String>();
+        Locale locale = Locale.getDefault();
+
     	for (Event event: toDoList) {
-    		newSA.add(event.toString());
+    		newSA.add(event.toString() + ", " +
+                    today.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, locale));
         }
     	
     	return newSA;
+    }
+
+    public List<String> eventRemarkArray() {
+        List<String> newSA = new ArrayList<String>();
+        for (Event event: toDoList) {
+            newSA.add("Remark: " + event.remark);
+        }
+
+        return newSA;
+    }
+
+    public List<Integer> eventTypeArray() {
+        List<Integer> types = new ArrayList<>();
+        for (Event event: toDoList) {
+            types.add(event.eventMode);
+        }
+
+        return types;
     }
     
     @Override

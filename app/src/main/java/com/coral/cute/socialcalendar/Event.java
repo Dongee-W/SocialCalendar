@@ -56,16 +56,16 @@ public class Event {
     
     public String eventModeToString() {
     	    	switch(eventMode) {
-    		case 0: return "Other";
-    		case 1: return "Work";
-    		case 2: return "Class";
-    		case 3: return "Workout";
-    		case 4: return "Meal";
-    		case 5: return "Homework";
-    		case 6: return "Meeting";
-    		case 7: return "Dining";
-    		case 8: return "Study";
-    		case 9: return "Rest";
+    		case 0: return "Party Time!";
+    		case 1: return "Work Hard.";
+    		case 2: return "Class. Course.";
+    		case 3: return "Workout---";
+    		case 4: return "Having Meal!!";
+    		case 5: return "Do Homework.";
+    		case 6: return "Go Meeting.";
+    		case 7: return "Movie # Relax";
+    		case 8: return "Study All @_@";
+    		case 9: return "Rest. Sleep";
     		default: return "Error";
     	}
     }
@@ -75,7 +75,7 @@ public class Event {
 
         String startFormatMinute = String.format("%02d", start.get(Calendar.MINUTE));
         String endFormatMinute = String.format("%02d", end.get(Calendar.MINUTE));
-        return this.eventModeToString() + "  "+ start.get(Calendar.HOUR_OF_DAY) +
+        return this.eventModeToString() + "         " + start.get(Calendar.HOUR_OF_DAY) +
                 ":" + startFormatMinute + "-" +
                 end.get(Calendar.HOUR_OF_DAY) +
                 ":" + endFormatMinute;

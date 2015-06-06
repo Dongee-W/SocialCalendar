@@ -28,7 +28,7 @@ import java.util.List;
 public class MainPageFrag extends Fragment {
 
     private String userID;
-    ArrayAdapter mForecastAdapter;
+    ListView listView;
 
     // Inflate the fragment layout we defined above for this fragment
     // Set the associated text for the title
@@ -64,21 +64,37 @@ public class MainPageFrag extends Fragment {
                 "Lord of rings     May 14, 2015  13:20-19:34"
         };
         List<String> todayList = new ArrayList<String>(Arrays.asList(data));
+        List<Integer> gggg = new ArrayList<Integer>(){{
+            add(0);
+            add(1);
+            add(2);
+            add(3);
+            add(6);
+            add(5);
+            add(4);
+        }};
+
 
 
         // Now that we have some dummy forecast data, create an ArrayAdapter.
         // The ArrayAdapter will take data from a source (like our dummy forecast) and
         // use it to populate the ListView it's attached to.
+        /*
         mForecastAdapter =
                 new ArrayAdapter<String>(
                         getActivity(), // The current context (this activity)
                         R.layout.list_item_todo, // The name of the layout ID.
                         R.id.list_item_todo_textview, // The ID of the textview to populate.
-                        todayList);
+                        todayList);*/
 
         // Get a reference to the ListView, and attach this adapter to it.
-        ListView listView = (ListView) view.findViewById(R.id.listview_todo);
-        listView.setAdapter(mForecastAdapter);
+        listView = (ListView) view.findViewById(R.id.listview_todo);
+        List<String> placeholder = new ArrayList<String>();
+        placeholder.add("Check Internet Connection");
+        LazyAdapter adapter = new LazyAdapter(getActivity(),
+                todayList, gggg, placeholder);
+        listView.setAdapter(adapter);
+        //listView.setAdapter(mForecastAdapter);
         setListViewHeightBasedOnChildren(listView);
 
         return view;
@@ -122,7 +138,7 @@ public class MainPageFrag extends Fragment {
     }
 
     /** Fetch data from server */
-    public class FetchDataTask extends AsyncTask<String, Void, List<String>> {
+    public class FetchDataTask extends AsyncTask<String, Void, DailyList> {
 
         public String getWebServre(String Action, String Para) {
 
@@ -143,12 +159,6 @@ public class MainPageFrag extends Fragment {
                         con.getInputStream(), "UTF-8"));
                 String jsonString = reader.readLine();
                 reader.close();
-                // json
-                //String jsonString = jsonString1;
-                //JSONArray jsonarr = new JSONArray(jsonString);
-                //requestData = jsonObj.getJSONObject("ID") + "";
-
-                //requestData = jsonarr.getJSONObject(0).getString("remark")+"";
 
                 return jsonString;
 
@@ -158,24 +168,31 @@ public class MainPageFrag extends Fragment {
         }
 
         @Override
-        protected List<String> doInBackground(String... params) {
+        protected DailyList doInBackground(String... params) {
             String dayString = "{\"day\": {\"year\": 2015, \"month\": 5, \"date\": 18}, \"todo\":";
-            String todo = getWebServre("GetDay", "UserID=" + params[0] + "&Year=2015&Month=06&Date=21");
+            String todo = getWebServre("GetDay", "UserID=" + params[0] + "&Year=2015&Month=02&Date=20");
             String total = dayString + todo + "}";
-            //Log.e("sdf",total);
-            DailyList myDL = new DailyList(total);
-            return myDL.eventStringArray();
+            return new DailyList(total);
         }
 
         @Override
-        protected void onPostExecute(List<String> result) {
-            mForecastAdapter.clear();
-            if (result.size() == 0) {
-                mForecastAdapter.add("No data yet.");
+        protected void onPostExecute(DailyList result) {
+            if (result.eventStringArray().size() == 0) {
+                List<String> error = new ArrayList<String>();
+                error.add("No data yet.");
+                List<Integer> errorcode = new ArrayList<Integer>();
+                errorcode.add(111);
+                List<String> errorRemark = new ArrayList<String>();
+                errorRemark.add("Check Internet Connection");
+                LazyAdapter adapter = new LazyAdapter(getActivity(), error,
+                        errorcode, errorRemark);
+                listView.setAdapter(adapter);
             } else {
-                for(String dayForecastStr : result) {
-                    mForecastAdapter.add(dayForecastStr);
-                }
+                LazyAdapter adapter = new LazyAdapter(getActivity(),
+                        result.eventStringArray(),
+                        result.eventTypeArray(),
+                        result.eventRemarkArray());
+                listView.setAdapter(adapter);
             }
 
         }
