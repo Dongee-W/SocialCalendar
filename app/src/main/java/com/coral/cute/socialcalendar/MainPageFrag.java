@@ -130,11 +130,12 @@ public class MainPageFrag extends Fragment {
     public void onStart() {
         super.onStart();
 
+        /** Get current user */
         Intent intent = getActivity().getIntent();
         if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
             userID = intent.getStringExtra(Intent.EXTRA_TEXT);
         }
-
+        /** Get today's date */
         Calendar c = Calendar.getInstance();
         FetchDataTask fdt = new FetchDataTask();
         fdt.execute(userID, Integer.toString(c.get(Calendar.YEAR)),
@@ -142,16 +143,15 @@ public class MainPageFrag extends Fragment {
                 Integer.toString(c.get(Calendar.DAY_OF_MONTH)));
     }
 
-    /** Fetch data from server */
+    /** Fetch today's list from server */
     public class FetchDataTask extends AsyncTask<String, Void, DailyList> {
 
         public String getWebServre(String Action, String Para) {
 
-
-            String ServerUrl = "http://140.116.86.54/Public/AI_Account.aspx?";
+            String serverUrl = "http://140.116.86.54/Public/AI_Account.aspx?";
 
             try {
-                URL url = new URL(ServerUrl + "Action=" + Action + "&" + Para);
+                URL url = new URL(serverUrl + "Action=" + Action + "&" + Para);
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
                 con.setConnectTimeout(6000);
@@ -177,16 +177,17 @@ public class MainPageFrag extends Fragment {
             String dayString = "{\"day\": {\"year\": " + params[1] +
                     ", \"month\": " + params[2] +", \"date\": " +
                     params[3] + "}, \"todo\":";
-            String todo = getWebServre("GetDay", "UserID=" + params[0] + "&Year=" +
+            /*String todo = getWebServre("GetDay", "UserID=" + params[0] + "&Year=" +
                             params[1] + "&Month=" + params[2] +
-                    "&Date=" + params[3]);
-            //String todo = getWebServre("GetDay", "UserID=3&Year=2015&Month=06&Date=06");
+                    "&Date=" + params[3]);*/
+            String todo = getWebServre("GetDay", "UserID=3&Year=2015&Month=2&Date=20");
             String total = dayString + todo + "}";
             return new DailyList(total);
         }
 
         @Override
         protected void onPostExecute(DailyList result) {
+            /** Check if there are data for today */
             if (result.eventStringArray().size() == 0) {
                 List<String> error = new ArrayList<String>();
                 error.add("No data yet.");
@@ -203,6 +204,7 @@ public class MainPageFrag extends Fragment {
                         result.eventTypeArray(),
                         result.eventRemarkArray());
                 listView.setAdapter(adapter);
+                setListViewHeightBasedOnChildren(listView);
             }
 
         }
