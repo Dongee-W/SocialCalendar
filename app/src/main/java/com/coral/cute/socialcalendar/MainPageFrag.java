@@ -23,6 +23,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 public class MainPageFrag extends Fragment {
@@ -133,8 +134,12 @@ public class MainPageFrag extends Fragment {
         if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
             userID = intent.getStringExtra(Intent.EXTRA_TEXT);
         }
+
+        Calendar c = Calendar.getInstance();
         FetchDataTask fdt = new FetchDataTask();
-        fdt.execute(userID);
+        fdt.execute(userID, Integer.toString(c.get(Calendar.YEAR)),
+                Integer.toString(c.get(Calendar.MONTH) + 1),
+                Integer.toString(c.get(Calendar.DAY_OF_MONTH)));
     }
 
     /** Fetch data from server */
@@ -169,8 +174,13 @@ public class MainPageFrag extends Fragment {
 
         @Override
         protected DailyList doInBackground(String... params) {
-            String dayString = "{\"day\": {\"year\": 2015, \"month\": 5, \"date\": 18}, \"todo\":";
-            String todo = getWebServre("GetDay", "UserID=" + params[0] + "&Year=2015&Month=02&Date=20");
+            String dayString = "{\"day\": {\"year\": " + params[1] +
+                    ", \"month\": " + params[2] +", \"date\": " +
+                    params[3] + "}, \"todo\":";
+            String todo = getWebServre("GetDay", "UserID=" + params[0] + "&Year=" +
+                            params[1] + "&Month=" + params[2] +
+                    "&Date=" + params[3]);
+            //String todo = getWebServre("GetDay", "UserID=3&Year=2015&Month=06&Date=06");
             String total = dayString + todo + "}";
             return new DailyList(total);
         }
