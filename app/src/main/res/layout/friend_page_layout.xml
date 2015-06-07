@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- This is the fragment  to be displayed for a section associated with a tab -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical" android:layout_width="match_parent"
+              android:orientation="vertical" android:layout_width="fill_parent"
               android:layout_height="match_parent">
     <EditText
         android:layout_width="match_parent"
@@ -18,8 +18,20 @@
         android:layout_gravity="center_horizontal"
             />
 
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Friend Requests"
+            android:id="@+id/textView"
+            android:textSize="14dp"
+            android:paddingBottom="4dp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#737373"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"/>
+
     <ListView
         android:id="@+id/listview_friend"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

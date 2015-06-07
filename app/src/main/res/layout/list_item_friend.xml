@@ -8,23 +8,41 @@
             android:layout_width="50dip"
             android:layout_height="50dip" android:src="@drawable/pi1" android:scaleType="centerCrop"
             android:paddingLeft="5dp"/>
+
     <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingTop="10dp"
             android:paddingLeft="10dp">
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content" android:gravity="center_vertical"
-                  android:id="@+id/list_item_friend_main"/>
+                  android:text="New friend request from"
+                  android:textSize="10dp"
+                android:paddingTop="3dp"/>
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content" android:gravity="center_vertical"
-                  android:id="@+id/list_item_friend_subtitle"
-                  android:textSize="10dp"/>
+                  android:id="@+id/list_item_friend_main"
+                  android:textSize="18dp"/>
     </LinearLayout>
 
-
+    <Button
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:text="Accept"
+            android:id="@+id/accept"
+            android:background="#00BDA0"
+            android:textSize="10dp"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginLeft="40dp"/>
+    <Button
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:text="Decline"
+            android:id="@+id/decline"
+            android:background="#FE5C75"
+            android:textSize="10dp"
+            android:layout_gravity="center_vertical|right"/>
 
 </LinearLayout>

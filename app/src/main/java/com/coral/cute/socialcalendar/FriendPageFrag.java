@@ -21,9 +21,9 @@ import java.util.List;
 public class FriendPageFrag extends Fragment {
 
     private String userID;
-    ArrayAdapter friendAdapter;
     private Button addFriendBtn;
     private TextView friendID;
+    ListView listView;
     // Inflate the fragment layout we defined above for this fragment
     // Set the associated text for the title
     @Override
@@ -42,19 +42,22 @@ public class FriendPageFrag extends Fragment {
             }
         });
 
-        List<String> weekForecast = new ArrayList<String>();
-        friendAdapter =
-                new ArrayAdapter<String>(
-                        getActivity(), // The current context (this activity)
-                        R.layout.list_item_friend, // The name of the layout ID.
-                        R.id.list_item_friend_main, // The ID of the textview to populate.
-                        weekForecast);
+        /** Fake friend invite data */
+        String[] data = {
+                "John",
+                "Retuoy",
+                "Seesvengers",
+                "Grandudapest",
+        };
 
-
+        List<String> invites = new ArrayList<String>(Arrays.asList(data));
+        AdapterForInvites iad = new AdapterForInvites(getActivity(), invites);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        ListView listView = (ListView) view.findViewById(R.id.listview_friend);
-        listView.setAdapter(friendAdapter);
+        listView = (ListView) view.findViewById(R.id.listview_friend);
+        listView.setAdapter(iad);
+
+
 
 
         return view;
@@ -67,8 +70,8 @@ public class FriendPageFrag extends Fragment {
         Intent intent = getActivity().getIntent();
         if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
             userID = intent.getStringExtra(Intent.EXTRA_TEXT);
-            Log.i("pp", userID);
         }
+
         FetchDataTask fdt = new FetchDataTask();
         fdt.execute(userID);
     }
@@ -81,9 +84,6 @@ public class FriendPageFrag extends Fragment {
 
 
             String ServerUrl = "http://140.116.86.54/Public/AI_Account.aspx?";
-
-            String requestData = "Fail";
-
 
             try {
                 URL url = new URL(ServerUrl + "Action=" + Action + "&" + Para);
@@ -99,12 +99,6 @@ public class FriendPageFrag extends Fragment {
                         con.getInputStream(), "UTF-8"));
                 String jsonString = reader.readLine();
                 reader.close();
-                // json
-                //String jsonString = jsonString1;
-                //JSONArray jsonarr = new JSONArray(jsonString);
-                //requestData = jsonObj.getJSONObject("ID") + "";
-
-                //requestData = jsonarr.getJSONObject(0).getString("remark")+"";
 
                 return jsonString;
 
@@ -115,23 +109,17 @@ public class FriendPageFrag extends Fragment {
 
         @Override
         protected List<String> doInBackground(String... params) {
-            String friends = getWebServre("GetFriendList", "UserID=" + params[0]);
-            //Log.e("sdf",total);
-            Friends fs = new Friends(friends);
-            return fs.userIDs;
+            String friendrequests = getWebServre("GetInviteList", "UserID=" + params[0]);
+            FriendRequest fr = new FriendRequest(friendrequests);
+            return fr.userIDs;
         }
 
         @Override
         protected void onPostExecute(List<String> result) {
-            friendAdapter.clear();
-            if (result.size() == 0) {
-                friendAdapter.add("No friend yet.");
-            } else {
-                for(String friendStr : result) {
-                    friendAdapter.add(friendStr);
-                }
-            }
+            AdapterForInvites iad = new AdapterForInvites(getActivity(), result);
 
+            // Get a reference to the ListView, and attach this adapter to it.
+            listView.setAdapter(iad);
         }
     }
 

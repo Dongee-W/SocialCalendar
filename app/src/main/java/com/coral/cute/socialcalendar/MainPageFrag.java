@@ -81,9 +81,6 @@ public class MainPageFrag extends Fragment {
         //listView.setAdapter(mForecastAdapter);
         setListViewHeightBasedOnChildren(listView);
 
-        sv = (ScrollView) view.findViewById(R.id.main_page_scrollview);
-        sv.scrollTo(0, 0);
-
         return view;
     }
 
@@ -127,7 +124,6 @@ public class MainPageFrag extends Fragment {
         fdt.execute(userID, Integer.toString(c.get(Calendar.YEAR)),
                 Integer.toString(c.get(Calendar.MONTH) + 1),
                 Integer.toString(c.get(Calendar.DAY_OF_MONTH)));
-        sv.scrollTo(100, 0);
     }
 
     /** Fetch today's list from server */
