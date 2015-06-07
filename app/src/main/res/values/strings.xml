@@ -6,5 +6,6 @@
     <string name="daily_detail">Daily Details</string>
     <string name="title_activity_login_register">LoginRegister</string>
     <string name="title_activity_event_form">EventForm</string>
+    <string name="send_friend_request">Send Friend Request!</string>
 
 </resources>

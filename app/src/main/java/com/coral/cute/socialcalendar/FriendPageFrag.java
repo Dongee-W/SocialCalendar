@@ -8,10 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -40,9 +37,8 @@ public class FriendPageFrag extends Fragment {
 
             @Override
             public void onClick(View v) {
-                AddFriendTask aft = new AddFriendTask();
-                Log.i("hhh", friendID.getText().toString());
-                aft.execute(userID, friendID.getText().toString());
+                InviteFriendTask ift = new InviteFriendTask();
+                ift.execute(userID, friendID.getText().toString());
             }
         });
 
@@ -50,9 +46,11 @@ public class FriendPageFrag extends Fragment {
         friendAdapter =
                 new ArrayAdapter<String>(
                         getActivity(), // The current context (this activity)
-                        R.layout.list_item_todo, // The name of the layout ID.
-                        R.id.list_item_todo_textview, // The ID of the textview to populate.
+                        R.layout.list_item_friend, // The name of the layout ID.
+                        R.id.list_item_friend_main, // The ID of the textview to populate.
                         weekForecast);
+
+
 
         // Get a reference to the ListView, and attach this adapter to it.
         ListView listView = (ListView) view.findViewById(R.id.listview_friend);
@@ -76,7 +74,7 @@ public class FriendPageFrag extends Fragment {
     }
 
 
-    /** Fetch data from server */
+    /** Fetch friend request from server */
     public class FetchDataTask extends AsyncTask<String, Void, List<String>> {
 
         public String getWebServre(String Action, String Para) {
@@ -137,15 +135,12 @@ public class FriendPageFrag extends Fragment {
         }
     }
 
-    public class AddFriendTask extends AsyncTask<String, Void, Void> {
+    public class InviteFriendTask extends AsyncTask<String, Void, String> {
 
         public String getWebServre(String Action, String Para) {
 
 
             String ServerUrl = "http://140.116.86.54/Public/AI_Account.aspx?";
-
-            String requestData = "Fail";
-
 
             try {
                 URL url = new URL(ServerUrl + "Action=" + Action + "&" + Para);
@@ -161,13 +156,6 @@ public class FriendPageFrag extends Fragment {
                         con.getInputStream(), "UTF-8"));
                 String jsonString = reader.readLine();
                 reader.close();
-                // json
-                //String jsonString = jsonString1;
-                //JSONArray jsonarr = new JSONArray(jsonString);
-                //requestData = jsonObj.getJSONObject("ID") + "";
-
-                //requestData = jsonarr.getJSONObject(0).getString("remark")+"";
-
                 return jsonString;
 
             } catch (Exception e) {
@@ -176,11 +164,20 @@ public class FriendPageFrag extends Fragment {
         }
 
         @Override
-        protected Void doInBackground(String... params) {
-            Log.e("kkkk", params[0]);
-            Log.e("kkkk", params[1]);
-            String friends = getWebServre("AddFriend", "User1=" + params[0] + "&User2=" + params[1]);
-            return null;
+        protected String doInBackground(String... params) {
+            return getWebServre("FriendInvite", "User1=" + params[0] + "&User2=" + params[1]);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (result.equals("Success"))
+                Toast.makeText(getActivity(),
+                        "Friend request sended.",
+                        Toast.LENGTH_LONG).show();
+            else Toast.makeText(getActivity(),
+                    "Error",
+                    Toast.LENGTH_LONG).show();
+
         }
 
     }

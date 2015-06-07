@@ -8,11 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import org.json.JSONArray;
@@ -30,6 +26,7 @@ public class MainPageFrag extends Fragment {
 
     private String userID;
     ListView listView;
+    ScrollView sv;
 
     // Inflate the fragment layout we defined above for this fragment
     // Set the associated text for the title
@@ -37,10 +34,10 @@ public class MainPageFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_page_layout, container, false);
 
-
-
         final com.prolificinteractive.materialcalendarview.MaterialCalendarView cal =
                 (com.prolificinteractive.materialcalendarview.MaterialCalendarView) view.findViewById(R.id.calendarView);
+        Calendar calendar = Calendar.getInstance();
+        cal.setSelectedDate(calendar);
 
         cal.setOnDateChangedListener(
                 new com.prolificinteractive.materialcalendarview.OnDateChangedListener(){
@@ -52,7 +49,6 @@ public class MainPageFrag extends Fragment {
                     }
                 }
         );
-
 
         // Create some dummy data for the ListView.
         String[] data = {
@@ -75,19 +71,6 @@ public class MainPageFrag extends Fragment {
             add(4);
         }};
 
-
-
-        // Now that we have some dummy forecast data, create an ArrayAdapter.
-        // The ArrayAdapter will take data from a source (like our dummy forecast) and
-        // use it to populate the ListView it's attached to.
-        /*
-        mForecastAdapter =
-                new ArrayAdapter<String>(
-                        getActivity(), // The current context (this activity)
-                        R.layout.list_item_todo, // The name of the layout ID.
-                        R.id.list_item_todo_textview, // The ID of the textview to populate.
-                        todayList);*/
-
         // Get a reference to the ListView, and attach this adapter to it.
         listView = (ListView) view.findViewById(R.id.listview_todo);
         List<String> placeholder = new ArrayList<String>();
@@ -97,6 +80,9 @@ public class MainPageFrag extends Fragment {
         listView.setAdapter(adapter);
         //listView.setAdapter(mForecastAdapter);
         setListViewHeightBasedOnChildren(listView);
+
+        sv = (ScrollView) view.findViewById(R.id.main_page_scrollview);
+        sv.scrollTo(0, 0);
 
         return view;
     }
@@ -141,6 +127,7 @@ public class MainPageFrag extends Fragment {
         fdt.execute(userID, Integer.toString(c.get(Calendar.YEAR)),
                 Integer.toString(c.get(Calendar.MONTH) + 1),
                 Integer.toString(c.get(Calendar.DAY_OF_MONTH)));
+        sv.scrollTo(100, 0);
     }
 
     /** Fetch today's list from server */
@@ -177,10 +164,10 @@ public class MainPageFrag extends Fragment {
             String dayString = "{\"day\": {\"year\": " + params[1] +
                     ", \"month\": " + params[2] +", \"date\": " +
                     params[3] + "}, \"todo\":";
-            /*String todo = getWebServre("GetDay", "UserID=" + params[0] + "&Year=" +
+            String todo = getWebServre("GetDay", "UserID=" + params[0] + "&Year=" +
                             params[1] + "&Month=" + params[2] +
-                    "&Date=" + params[3]);*/
-            String todo = getWebServre("GetDay", "UserID=3&Year=2015&Month=2&Date=20");
+                    "&Date=" + params[3]);
+            //String todo = getWebServre("GetDay", "UserID=3&Year=2015&Month=2&Date=20");
             String total = dayString + todo + "}";
             return new DailyList(total);
         }
@@ -205,6 +192,7 @@ public class MainPageFrag extends Fragment {
                         result.eventRemarkArray());
                 listView.setAdapter(adapter);
                 setListViewHeightBasedOnChildren(listView);
+
             }
 
         }
