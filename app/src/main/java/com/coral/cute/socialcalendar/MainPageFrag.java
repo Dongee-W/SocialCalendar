@@ -26,7 +26,6 @@ public class MainPageFrag extends Fragment {
 
     private String userID;
     ListView listView;
-    ScrollView sv;
 
     // Inflate the fragment layout we defined above for this fragment
     // Set the associated text for the title
@@ -44,7 +43,8 @@ public class MainPageFrag extends Fragment {
                     @Override
                     public void onDateChanged(MaterialCalendarView materialCalendarView, CalendarDay calendarDay) {
                         String day = calendarDay.toString();
-                        Intent intent = new Intent(getActivity(), DailyDetail.class).putExtra(Intent.EXTRA_TEXT, day);
+                        Intent intent = new Intent(getActivity(), DailyDetail.class).putExtra("DATE", day)
+                                .putExtra("USERID", userID);
                         startActivity(intent);
                     }
                 }
