@@ -20,7 +20,7 @@ import java.util.List;
 
 public class FriendPageFrag extends Fragment {
 
-    private String userID;
+    public String userID;
     private Button addFriendBtn;
     private TextView friendID;
     ListView listView;
@@ -51,13 +51,11 @@ public class FriendPageFrag extends Fragment {
         };
 
         List<String> invites = new ArrayList<String>(Arrays.asList(data));
-        AdapterForInvites iad = new AdapterForInvites(getActivity(), invites);
+        AdapterForInvites iad = new AdapterForInvites(getActivity(), invites, 0);
 
         // Get a reference to the ListView, and attach this adapter to it.
         listView = (ListView) view.findViewById(R.id.listview_friend);
         listView.setAdapter(iad);
-
-
 
 
         return view;
@@ -116,7 +114,14 @@ public class FriendPageFrag extends Fragment {
 
         @Override
         protected void onPostExecute(List<String> result) {
-            AdapterForInvites iad = new AdapterForInvites(getActivity(), result);
+            AdapterForInvites iad;
+            int isEmpty = 0;
+            if (result.size()==0) {
+                result.add("No new friends request!");
+                isEmpty = 1;
+            }
+            iad = new AdapterForInvites(getActivity(), result, isEmpty);
+
 
             // Get a reference to the ListView, and attach this adapter to it.
             listView.setAdapter(iad);

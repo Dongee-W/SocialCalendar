@@ -2,13 +2,16 @@ package com.coral.cute.socialcalendar;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 public class LazyAdapter extends BaseAdapter {
@@ -78,6 +81,10 @@ public class LazyAdapter extends BaseAdapter {
             image.setImageResource(R.drawable.event_error);
 
 
+
+
         return vi;
     }
+
+
 }
