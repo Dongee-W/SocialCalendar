@@ -60,7 +60,6 @@ public class FriendPageFrag extends Fragment {
         listView.setAdapter(iad);
 
 
-
         return view;
     }
 

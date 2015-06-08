@@ -119,12 +119,6 @@ public class AdapterForInvites extends BaseAdapter {
         }
         text.setText(data.get(position));
 
-
-
-
-
-
-
         return vi;
     }
 
