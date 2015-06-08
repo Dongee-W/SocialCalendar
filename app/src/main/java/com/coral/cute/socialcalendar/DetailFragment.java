@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DetailFragment extends Fragment {
 
@@ -86,12 +88,19 @@ public class DetailFragment extends Fragment {
             userID = intent.getStringExtra("USERID");
             date = intent.getStringExtra("DATE");
         }
+
+        Pattern p = Pattern.compile("\\d+");
+        Matcher m = p.matcher(date);
+        m.find();
+        String year = m.group();
+        m.find();
+        String month = m.group();
+        m.find();
+        String date = m.group();
         /** Get today's date */
         Calendar c = Calendar.getInstance();
         FetchDataTask fdt = new FetchDataTask();
-        fdt.execute(userID, Integer.toString(c.get(Calendar.YEAR)),
-                Integer.toString(c.get(Calendar.MONTH) + 1),
-                Integer.toString(c.get(Calendar.DAY_OF_MONTH)));
+        fdt.execute(userID, year, month, date);
     }
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
