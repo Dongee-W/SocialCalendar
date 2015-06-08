@@ -34,4 +34,20 @@
         android:id="@+id/listview_friend"
         android:layout_width="fill_parent"
         android:layout_height="match_parent" />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Friends"
+            android:id="@+id/textView2"
+            android:textSize="14dp"
+            android:paddingBottom="4dp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#737373"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"/>
+    <ListView
+            android:id="@+id/listview_friend2"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent" />
 </LinearLayout>

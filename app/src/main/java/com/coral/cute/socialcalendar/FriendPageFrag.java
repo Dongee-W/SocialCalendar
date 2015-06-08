@@ -24,6 +24,7 @@ public class FriendPageFrag extends Fragment {
     private Button addFriendBtn;
     private TextView friendID;
     ListView listView;
+    ListView listView2;
     // Inflate the fragment layout we defined above for this fragment
     // Set the associated text for the title
     @Override
@@ -55,10 +56,37 @@ public class FriendPageFrag extends Fragment {
 
         // Get a reference to the ListView, and attach this adapter to it.
         listView = (ListView) view.findViewById(R.id.listview_friend);
+        listView2 = (ListView) view.findViewById(R.id.listview_friend2);
         listView.setAdapter(iad);
 
 
+
         return view;
+    }
+
+    /**** Method for Setting the Height of the ListView dynamically.
+     **** Hack to fix the issue of not showing all the items of the ListView
+     **** when placed inside a ScrollView  ****/
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 
     @Override
@@ -72,6 +100,10 @@ public class FriendPageFrag extends Fragment {
 
         FetchDataTask fdt = new FetchDataTask();
         fdt.execute(userID);
+        FetchFriendsTask fft = new FetchFriendsTask();
+        fft.execute(userID);
+
+
     }
 
 
@@ -125,6 +157,62 @@ public class FriendPageFrag extends Fragment {
 
             // Get a reference to the ListView, and attach this adapter to it.
             listView.setAdapter(iad);
+            setListViewHeightBasedOnChildren(listView);
+        }
+    }
+
+    /** Fetch friend request from server */
+    public class FetchFriendsTask extends AsyncTask<String, Void, List<String>> {
+
+        public String getWebServre(String Action, String Para) {
+
+
+            String ServerUrl = "http://140.116.86.54/Public/AI_Account.aspx?";
+
+            try {
+                URL url = new URL(ServerUrl + "Action=" + Action + "&" + Para);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+                con.setConnectTimeout(6000);
+                con.setRequestMethod("GET");
+                con.setRequestProperty("Content-Type", "text/xml;charset=utf-8");
+                con.connect();
+
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(
+                        con.getInputStream(), "UTF-8"));
+                String jsonString = reader.readLine();
+                reader.close();
+
+                return jsonString;
+
+            } catch (Exception e) {
+                return e.toString();
+            }
+        }
+
+        @Override
+        protected List<String> doInBackground(String... params) {
+            String friends = getWebServre("GetFriendList", "UserID=" + params[0]);
+            Friends fr = new Friends(friends);
+            //Log.i("df", params[0]);
+            return fr.userIDs;
+        }
+
+        @Override
+        protected void onPostExecute(List<String> result) {
+            FriendsAdapter fad;
+            boolean isEmpty = false;
+            if (result.size()==0) {
+                result.add("No friends yet!");
+                isEmpty = true;
+            }
+            fad = new FriendsAdapter(getActivity(), result, isEmpty);
+
+
+            // Get a reference to the ListView, and attach this adapter to it.
+            listView2.setAdapter(fad);
+            setListViewHeightBasedOnChildren(listView2);
         }
     }
 
