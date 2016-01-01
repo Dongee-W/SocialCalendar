@@ -1,5 +1,6 @@
 package com.coral.cute.socialcalendar;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -67,6 +68,9 @@ public class EventForm extends ActionBarActivity {
                         eventMode.getText().toString(),
                         eventRemark.getText().toString().replaceAll(" ", "%20"),
                         (isPublic.isChecked()) ? "1" : "0");
+
+                Intent intent = new Intent(EventForm.this, DailyDetail.class);
+                startActivity(intent);
             }
 
         });
